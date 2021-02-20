@@ -39,6 +39,10 @@ Additionally, ensure that the mxnet version of your Deeplens is up to date. You 
 
     sudo pip3 install mxnet==0.12.1
 
+Some of the AWS services you need to use are only available in the US EAST (N. VIRGINIA) region. To ensure you can use all your code in conjunction with each other and deploy them successfully, make sure you are using all AWS services in the US East region.
+
+I made the mistake of leaving my Sagemaker models running for days. DO NOT make this mistake as will be billed for the amount of time you leave your Sagemaker scripts running (RIP wallet). 
+
 Finally, I highly recommend utilizing the IoT console to view MQTT messages from your training model. This will help with debugging. Also, AWS CloudWatch will also come in handy to monitor your lambda function code.
 
 ## Contact
