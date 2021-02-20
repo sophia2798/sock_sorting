@@ -45,3 +45,23 @@ s3validation = 's3://{}/{}/validation/'.format(bucket,prefix)
 
 # at this point, you should have the .rec files in the root of your deeplens bucket, a folder with the name of your prefix variable on line 13, inside that folder a 'train' and 'validation' channel with the appropriate .rec files in each
 
+# create an output location in your S3 bucket
+s3_output_location = 's3://{}/{}/output'.format(bucket,prefix)
+
+# input training job parameters, the code below will initialize the training job
+ic = sagemaker.estimator.Estimator(training_images, role, instance_count=1, instance_type='ml.p2.xlarge', volume_size=50, max_run=360000, input_mode='File', output_path=s3_output_location, sagemaker_session=sess)
+
+# set sagemaker hyper parameters
+ic.set_hyperparameters(num_layers=18, use_pretrained_model=1, image_shape="3,512,512", num_classes=3, num_training_samples=161, mini_batch_size=2, epochs=100, learning_rate=0.0005, precision_dtype='float32')
+
+# set the channels that will be used for training and the data type of the training files
+train_data = sagemaker.inputs.TrainingInput(s3train, distribution='FullyReplicated', content_type='application/x-recordio', s3_data_type='S3Prefix')
+validation_data = sagemaker.inputs.TrainingInput(s3validation, distribution='FullyReplicated', content_type='application/x-recordio', s3_data_type='S3Prefix')
+
+data_channels = {'train': train_data, 'validation': validation_data}
+
+# start training
+ic.fit(inputs=data_channels, logs=True)
+
+# deploy the training model
+ic_classifier = ic.deploy(initial_instance_count=1, instance_type='ml.m4.xlarge')
