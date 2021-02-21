@@ -42,7 +42,9 @@ def infinite_infer_run():
         ret, frame = awscam.getLastFrame()
         if ret == False:
             raise Exception("Failed to get frame from the stream")
-        frame_resize = cv2.resize(frame, (input_height, input_width))
+        # preprocess get rid of fisheye
+        undistorted_image = undistort(frame)
+        frame_resize = cv2.resize(undistorted_image, (input_height, input_width))
         predictions = model.doInference(frame_resize)
         parsed_inference_results = model.parseResult(model_type, predictions)
         
@@ -62,6 +64,22 @@ def infinite_infer_run():
         for obj in top_k:
             cloud_output[output_map[obj['label']]] = obj['prob']
         client.publish(topic=iot_topic, payload=json.dumps(cloud_output))
+
+# image preprocessing
+class Config:
+    def __init__(self):
+        pass 
+
+# fix fisheye
+def undistort(frame):
+    frame_height, frame_width, _ = frame.shape
+    K=np.array([[511.98828907136766, 0.0, 426.48016197546474], [0.0, 513.8644747557715, 236.89875770956868], [0.0, 0.0, 1.0]])
+    D=np.array([[-0.10969105781526832], [0.03463562293251206], [-0.2341226037892333], [0.34335682066685935]])
+    DIM = (int(frame_width/3), int(frame_height/3))
+    frame_resize = cv2.resize(frame, DIM)
+    map1, map2 = cv2.fisheye.initUndistortRectifyMap(K, D, np.eye(3), K, DIM, cv2.CV_16SC2)
+    undistorted_image = cv2.remap(frame_resize, map1, map2, interpolation=cv2.INTER_LINEAR, borderMode=cv2.BORDER_CONSTANT)
+    return undistorted_image
 
 # run the function
 infinite_infer_run()
