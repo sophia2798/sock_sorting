@@ -74,3 +74,38 @@ def SaltPepperNoise(edgeImg):
 edges_ = np.asarray(edges, np.uint8) # this assigns the data type as an 8-bit unsigned integer, which ensures the image will be displayed as is
 SaltPepperNoise(edges_)
 cv2.imwrite('edge.jpg', edges_)
+
+# FIND SIGNIFICANT/LARGEST CONTOUR
+
+# this was the other part of the preprocessing code that took up a lot of my time. i tried a couple of different functions to identify the largest contour. i started off by just singling out the largest contour and then also added a rectangular boundary/contour around that contour later.
+
+ret, thresh = cv2.threshold(edges_, 127, 255, 0)
+
+def findSignificantContours(edgeImg, img):
+    contours, hierarchy = cv2.findContours(edgeImg, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+#  this was the first piece of code i tried...
+#     level1Meta = []
+#     for contourIndex, tupl in enumerate(hierarchy[0]):
+#         if tupl[3] == -1:
+#             tupl = np.insert(tupl.copy(), 0, [contourIndex])
+#             level1Meta.append(tupl)
+            
+#     contoursWithArea = []
+#     for tupl in level1Meta:
+#         contourIndex = tupl[0]
+#         contour = contours[contourIndex]
+#         area = cv2.contourArea(contour)
+#         contoursWithArea.append([contour, area, contourIndex])
+        
+#     contoursWithArea.sort(key=lambda meta: meta[1], reverse=True)
+#     largestContour = contoursWithArea[0][0]
+#     return largestContour
+    
+    if len(contours) != 0:
+        cv2.drawContours(img, contours, -1, 255, 1) # -1 in the third argument space means that all contours will be drawn
+        maxContour = max(contours, key=cv2.contourArea)
+        cv2.drawContours(img, c, -1, (60,40,220),3)
+        x,y,w,h = cv2.boundingRect(c)
+
+        cv2.rectangle(img, (x,y), (x+w, y+h), (0,255,0),2)
+        return img
