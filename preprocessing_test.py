@@ -126,3 +126,8 @@ def scaleContour(cont, scale):
 
     return cont_scaled
 
+# APPLY SIGNIFICANT CONTOUR FUNCTION TO ORIGINAL IMAGE
+
+contourImg = np.copy(newimage)
+output = findSignificantContours(edges_, contourImg)
+cv2.imwrite('contour.jpg', output)
