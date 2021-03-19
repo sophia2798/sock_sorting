@@ -11,6 +11,8 @@
 
 Python based deep learning image classification program to sort socks with AWS Deeplens. The code in this repository includes the training model and lambda function deployed to the Deeplens device. The actual used code was created and ran on AWS Sagemaker and AWS Lambda.
 
+NOTE: I carried out all of my testing and coding on AWS Sagemaker. I am just consolidating the code here in this repo so it can be shared and viewed by others. Therefore, the time scale of the commits is definitely not realistic. Most of what I was able to copmlete in each commit took days for me to actually test out correctly on Sagemaker.
+
 ## Use
 
 This code can be repurposed for any other basic image classification program by inputting different training images, supervised output maps, and adjusting any necessary hyper parameters.
