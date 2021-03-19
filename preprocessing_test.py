@@ -109,3 +109,20 @@ def findSignificantContours(edgeImg, img):
 
         cv2.rectangle(img, (x,y), (x+w, y+h), (0,255,0),2)
         return img
+
+# SCALING CONTOUR
+
+# this is an optional step that you may or may not want/need. the dilation and erosion transformations change the size of your contour, so i included a short scaling function to help scale it back to its original size. that way when the contour is applied back to the original image for background subtraction it is to scale.
+
+def scaleContour(cont, scale):
+    M = cv2.moments(cont)
+    cx = int(M['m10']/M['m00'])
+    cy = int(M['m01']/M['m00'])
+    
+    cont_norm = cont - [cx,cy]
+    cont_scaled = cont_norm*scale
+    cont_scaled += [cx,cy]
+    cont_scaled = cont_scaled.astype(np.int32) # np.int32 is the same as np.uint8
+
+    return cont_scaled
+
