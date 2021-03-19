@@ -28,7 +28,9 @@ with open(resized_file_name, 'rb') as f:
     payload = f.read()
     payload = bytearray(payload)
 
-newimg = Im.fromarray(newimage) # the PIL.Image.fromarray() and np.array() function online 36, are important to note. some functions/preprocessing techniques require the image to be in PIL format while some require it to be in the form of a numpy array. the two functions mentioned can be used to convert an image between the two formats.
+# APPLY A CONTRAST TO THE IMAGE
+
+newimg = Im.fromarray(newimage) # the PIL.Image.fromarray() and np.array() function online 38, are important to note. some functions/preprocessing techniques require the image to be in PIL format while some require it to be in the form of a numpy array. the two functions mentioned can be used to convert an image between the two formats.
 enh_con = ImageEnhance.Contrast(newimg)
 contrast = 3.01 
 img_contrasted = enh_con.enhance(contrast)
@@ -36,3 +38,23 @@ image = img_contrasted
 image = np.array(image)
 contrast_file_name = 'contrast-image.jpg'
 cv2.imwrite(contrast_file_name, image)
+
+# APPLY MORPHOLOGICAL TRANSFORMATIONS AND CANNY EDGE DETECTION
+
+# this is one of the main parts of the code that i had to play around with A LOT. just trying out different settings and figuring out what best suited my needs. depending on what object you are trying to detect, you might want to use different settings (i.e. iterations, aperature size, etc.). i started out only applying the canny edge detection, but found that the dilation and erosion transformations helped a great deal in singling out the major/important edges.
+
+MORPH = 9
+img = cv2.cvtColor(newimage, cv2.COLOR_BGR2GRAY) # many of the preprocessing steps we will end up taking (i.e. threshold) require the image to be on the grayscale
+kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (MORPH,MORPH)) # this function allows you to input shape and size and will output the desired kernel. this is so you don't have to manually create the structuring elements.
+dilated = cv2.dilate(img,kernel,iterations=1)
+eroded = cv2.erode(dilated,kernel,iterations=3)
+edges = cv2.Canny(eroded,50,200,aperatureSize=3) # aperature size has to be an odd integer between 3-7
+canny_file_name = 'edge-raw.jpg'
+cv2.imwrite(canny_file_name,edges)
+
+# OPTION: you can use 'Image(file_name)' at any point to view a displayed output of your image at any point in the preprocessing 
+
+# FILTER OUT SALT AND PEPPER NOISE
+
+# we will use a median filter, which computes the median of all the pixels within a kernel window and replaces the central pixel with the median value.
+
