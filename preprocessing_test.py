@@ -58,3 +58,19 @@ cv2.imwrite(canny_file_name,edges)
 
 # we will use a median filter, which computes the median of all the pixels within a kernel window and replaces the central pixel with the median value.
 
+def SaltPepperNoise(edgeImg):
+    count = 0
+    lastMedian = edgeImg
+    median = cv2.medianBlur(edgeImg,1)
+    while not np.array_equal(lastMedian,median):
+        zeroed = np.invert(np.logical_and(median, edgeImg))
+        edgeImg[zeroed] = 0
+        count += 1
+        if count > 70:
+            break
+        lastMedian = median
+        median = cv2.medianBlur(edgeImg,1)
+
+edges_ = np.asarray(edges, np.uint8) # this assigns the data type as an 8-bit unsigned integer, which ensures the image will be displayed as is
+SaltPepperNoise(edges_)
+cv2.imwrite('edge.jpg', edges_)
