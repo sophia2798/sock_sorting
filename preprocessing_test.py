@@ -15,7 +15,7 @@ test_image_name = 'IMG_0177.JPEG'
 image_org = cv2.imread(test_image_name)
 gauss_blurred = cv2.GaussianBlur(image_org, (5,5), 0)
 
-# RESIZE THE IMAGE (for testingp purposes so output is easier to see on the screen)
+# RESIZE THE IMAGE (for testingp purposes so output is easier to see on the screen AND/OR to scale the frame from the DeepLens to that of your training images)
 
 height, width, depth = gauss_blurred.shape
 imgScale = 0.17 # this number can be changed depending on your preferences
