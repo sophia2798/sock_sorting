@@ -13,6 +13,8 @@ Python based deep learning image classification program to sort socks with AWS D
 
 I highly recommend visiting the [OpenCV](https://opencv-python-tutroals.readthedocs.io/en/latest/index.html) website to view the latest documentation, descriptions, and examples.
 
+I started this project by following [this project](https://simon-aubury.medium.com/sorting-my-socks-with-deep-learning-part-1-1b5651d35f3e). I was able to get it to work as far as the end of the aforementioned article. However, I found that the author trained the model with images of socks in front of a stark white background and also proceeded to put the socks up against a similar white background for the project stream. This made it easy for the model to carryout correct inferences when socks were set against a solid, white background but not when they were set against more complex backgrounds. I wanted to create a more robust model that could handle a variety of backgrounds, which is why I expanded this project to look into concepts like edge detection, contours, morphological transformations, masks, etc. 
+
 NOTE: I carried out all of my testing and coding on AWS Sagemaker. I am just consolidating the code here in this repo so it can be shared and viewed by others. Therefore, the time scale of the commits is definitely not realistic. Most of what I was able to copmlete in each commit took days for me to actually test out correctly on Sagemaker.
 
 ## Use
