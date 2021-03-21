@@ -41,7 +41,9 @@ cv2.imwrite(contrast_file_name, image)
 
 # APPLY MORPHOLOGICAL TRANSFORMATIONS AND CANNY EDGE DETECTION
 
-# this is one of the main parts of the code that i had to play around with A LOT. just trying out different settings and figuring out what best suited my needs. depending on what object you are trying to detect, you might want to use different settings (i.e. iterations, aperature size, etc.). i started out only applying the canny edge detection, but found that the dilation and erosion transformations helped a great deal in singling out the major/important edges.
+'''
+this is one of the main parts of the code that i had to play around with A LOT. just trying out different settings and figuring out what best suited my needs. depending on what object you are trying to detect, you might want to use different settings (i.e. iterations, aperature size, etc.). i started out only applying the canny edge detection, but found that the dilation and erosion transformations helped a great deal in singling out the major/important edges.
+'''
 
 MORPH = 9
 img = cv2.cvtColor(newimage, cv2.COLOR_BGR2GRAY) # many of the preprocessing steps we will end up taking (i.e. threshold) require the image to be on the grayscale
@@ -77,7 +79,9 @@ cv2.imwrite('edge.jpg', edges_)
 
 # FIND SIGNIFICANT/LARGEST CONTOUR
 
-# this was the other part of the preprocessing code that took up a lot of my time. i tried a couple of different functions to identify the largest contour. i started off by just singling out the largest contour and then also added a rectangular boundary/contour around that contour later.
+'''
+this was the other part of the preprocessing code that took up a lot of my time. i tried a couple of different functions to identify the largest contour. i started off by just singling out the largest contour and then also added a rectangular boundary/contour around that contour later.
+'''
 
 ret, thresh = cv2.threshold(edges_, 127, 255, 0)
 
@@ -112,7 +116,9 @@ def findSignificantContours(edgeImg, img):
 
 # SCALING CONTOUR
 
-# this is an optional step that you may or may not want/need. the dilation and erosion transformations change the size of your contour, so i included a short scaling function to help scale it back to its original size. that way when the contour is applied back to the original image for background subtraction it is to scale.
+'''
+this is an optional step that you may or may not want/need. the dilation and erosion transformations change the size of your contour, so i included a short scaling function to help scale it back to its original size. that way when the contour is applied back to the original image for background subtraction it is to scale.
+'''
 
 def scaleContour(cont, scale):
     M = cv2.moments(cont)
