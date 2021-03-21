@@ -48,9 +48,9 @@ this is one of the main parts of the code that i had to play around with A LOT. 
 MORPH = 9
 img = cv2.cvtColor(newimage, cv2.COLOR_BGR2GRAY) # many of the preprocessing steps we will end up taking (i.e. threshold) require the image to be on the grayscale
 kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (MORPH,MORPH)) # this function allows you to input shape and size and will output the desired kernel. this is so you don't have to manually create the structuring elements.
-dilated = cv2.dilate(img,kernel,iterations=1)
-eroded = cv2.erode(dilated,kernel,iterations=3)
-edges = cv2.Canny(eroded,0,100,aperatureSize=3) # aperature size has to be an odd integer between 3-7
+dilated = cv2.dilate(eroded,kernel,iterations=1)
+eroded = cv2.erode(img,kernel,iterations=1)
+edges = cv2.Canny(dilated,0,100,aperatureSize=3) # aperature size has to be an odd integer between 3-7
 canny_file_name = 'edge-raw.jpg'
 cv2.imwrite(canny_file_name,edges)
 
