@@ -18,7 +18,8 @@ while(1):
     fgmask = fgbg.apply(frame)
     fgmask = cv2.morphologyEx(fgmask, cv2.MORPH_OPEN, kernel)
     
-    plt.imshow(fgmask)
+    # the image is loaded in BGR by default, want to convert it to RGB
+    plt.imshow(cv2.cvtColor(fgmask, cv2.COLOR_BGR2RGB))
     plt.show()
 
 # the code below is what you could use if cv2.imshow() function works in your python IDE
