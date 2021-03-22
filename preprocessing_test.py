@@ -50,7 +50,7 @@ img = cv2.cvtColor(newimage, cv2.COLOR_BGR2GRAY) # many of the preprocessing ste
 kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (MORPH,MORPH)) # this function allows you to input shape and size and will output the desired kernel. this is so you don't have to manually create the structuring elements.
 dilated = cv2.dilate(eroded,kernel,iterations=1)
 eroded = cv2.erode(img,kernel,iterations=1)
-edges = cv2.Canny(dilated,0,100,aperatureSize=3) # aperature size has to be an odd integer between 3-7
+edges = cv2.Canny(dilated,0,100,apertureSize=3) # aperture size has to be an odd integer between 3-7
 canny_file_name = 'edge-raw.jpg'
 cv2.imwrite(canny_file_name,edges)
 
