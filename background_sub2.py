@@ -45,6 +45,13 @@ while(1):
     fgmask = cv2.morphologyEx(fgmask, cv2.MORPH_OPEN, kernel)
     fgmask_rgb = cv2.cvtColor(fgmask, cv2.COLOR_BGR2RGB)
 
+    # add contrast to mask
+    fgmask_format = Image.fromarray(fgmask_rgb)
+    contrast = 4
+    enhance_contrast = ImageEnhance.Contrast(fgmask_format)
+    contrasted = enhance_contrast.enhance(contrast)
+    contrasted_arr = np.array(contrasted)
+
     # use canny edge detection
     edges = cv2.Canny(fgmask, 0, 100, apertureSize=3)
     contours, hierarchy = cv2.findContours(edges, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
