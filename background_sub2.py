@@ -59,6 +59,10 @@ while(1):
     edges_rgb = cv2.cvtColor(edges, cv2.COLOR_BGR2RGB)
     contours, hierarchy = cv2.findContours(edges, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 
+    '''
+    NEXT, I THINK I AM GOING TO TRY TO ADD A WHITE COLOR MASK. I TRIED THIS EARLIER BUT IT DIDN'T WORK BECAUSE THE SHAPE OF THE FGMASK ARRAY IS HUGE AND THE COLOR ARRAYS YOU CAN SPECIFY WHEN APPLYING A MASK ARE (3,1) SO I NEED TO FIND A WAY TO RESHAPE MY FGMASK
+    '''
+
     # conditional to check if there are any contours in the frame
     if hierarhcy is None:
         plt.imshow(cv2.cvtColor(fgmask, cv2.COLOR_BGR2RGB))
