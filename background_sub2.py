@@ -53,7 +53,10 @@ while(1):
     contrasted_arr = np.array(contrasted)
 
     # use canny edge detection
-    edges = cv2.Canny(fgmask, 0, 100, apertureSize=3)
+    erode = cv2.erode(contrasted_arr,kernel,iterations=5)
+    dilate = cv2.dilate(erode,kernel,iterations=1)
+    edges = cv2.Canny(dilate, 10, 200, apertureSize=3)
+    edges_rgb = cv2.cvtColor(edges, cv2.COLOR_BGR2RGB)
     contours, hierarchy = cv2.findContours(edges, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 
     # conditional to check if there are any contours in the frame
