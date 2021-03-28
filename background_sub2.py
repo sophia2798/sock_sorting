@@ -2,6 +2,8 @@ import os
 import cv2
 from matplotlib import pyplot as plt
 import numpy as np
+from PIL import Image
+from PIL import ImageEnhance
 
 '''
 For some reason, Jupyter Notebook/SageMaker doesn't like the cv.imshow() method. It seems to freeze the notebook and kill the kernel. I found a solution online that basically uses the matplotlib module's pyplot function to display the desired image(s) on a graph.
@@ -41,6 +43,7 @@ while(1):
     ret, frame = cap.read()
     fgmask = fgbg.apply(frame)
     fgmask = cv2.morphologyEx(fgmask, cv2.MORPH_OPEN, kernel)
+    fgmask_rgb = cv2.cvtColor(fgmask, cv2.COLOR_BGR2RGB)
 
     # use canny edge detection
     edges = cv2.Canny(fgmask, 0, 100, apertureSize=3)
