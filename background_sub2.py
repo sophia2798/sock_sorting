@@ -45,8 +45,12 @@ while(1):
     fgmask = cv2.morphologyEx(fgmask, cv2.MORPH_OPEN, kernel)
     fgmask_rgb = cv2.cvtColor(fgmask, cv2.COLOR_BGR2RGB)
 
+    # white mask
+    white = np.uint8([255,255,255])
+    mask = cv2.inRange(fgmask_rgb, white, white) # takes in the image and then the bounds of the color mask
+
     # add contrast to mask
-    fgmask_format = Image.fromarray(fgmask_rgb)
+    fgmask_format = Image.fromarray(mask)
     contrast = 4
     enhance_contrast = ImageEnhance.Contrast(fgmask_format)
     contrasted = enhance_contrast.enhance(contrast)
