@@ -51,14 +51,25 @@ while(1):
     mask = cv2.inRange(fgmask_rgb, white, white) # takes in the image and then the bounds of the color mask
 
     # add contrast to mask
+    '''
+    the code below can be used if you import the PIL library. unfortunately, this is not a standard library for aws lambda. you can still use this code if you compile a zip file with PIL/PILLOW installed via a virtual env and then upload the zip file to aws. online resources recommend using EC2 to compile the zip file and then upload it to S3 and then to lambda.
+    ---------------------------
     fgmask_format = Image.fromarray(mask)
     contrast = 4
     enhance_contrast = ImageEnhance.Contrast(fgmask_format)
     contrasted = enhance_contrast.enhance(contrast)
     contrasted_arr = np.array(contrasted)
+    '''
 
+    '''
+    the code below uses opencv to add contrast to the image. the opencv method goes through each pixel of the image and applies a multiplication and addition constant to add contrast and brightness
+    '''
+    contrast_img = np.zeros(mask.shape, mask.dtype) # initialize a matrix of zeros of the correct shape and type
+    alpha = 3.0 # contrast value
+    beta = 0 # brightness value
+    contrast img = cv2.convertScaleAbs(mask, alpha=alpha, beta=beta)
     # use canny edge detection
-    erode = cv2.erode(contrasted_arr,kernel,iterations=5)
+    erode = cv2.erode(contrast_img,kernel,iterations=5)
     dilate = cv2.dilate(erode,kernel,iterations=1)
     edges = cv2.Canny(dilate, 10, 200, apertureSize=3)
     edges_rgb = cv2.cvtColor(edges, cv2.COLOR_BGR2RGB)
