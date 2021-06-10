@@ -44,6 +44,7 @@ while(1):
     fgmask = fgbg.apply(frame)
     fgmask = cv2.morphologyEx(fgmask, cv2.MORPH_OPEN, kernel)
     fgmask_rgb = cv2.cvtColor(fgmask, cv2.COLOR_BGR2RGB)
+    frame_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
     # white mask
     white = np.uint8([255,255,255])
@@ -63,18 +64,16 @@ while(1):
     edges_rgb = cv2.cvtColor(edges, cv2.COLOR_BGR2RGB)
     contours, hierarchy = cv2.findContours(edges, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 
-    '''
-    NEXT, I THINK I AM GOING TO TRY TO ADD A WHITE COLOR MASK. I TRIED THIS EARLIER BUT IT DIDN'T WORK BECAUSE THE SHAPE OF THE FGMASK ARRAY IS HUGE AND THE COLOR ARRAYS YOU CAN SPECIFY WHEN APPLYING A MASK ARE (3,1) SO I NEED TO FIND A WAY TO RESHAPE MY FGMASK
-    '''
-
     # conditional to check if there are any contours in the frame
     if hierarhcy is None:
         plt.imshow(cv2.cvtColor(fgmask, cv2.COLOR_BGR2RGB))
     else:
         sigcontour = findSignificantContour(edges)
-        copy = np.copy(fgmask)
-        cv2.drawContours(copy, sigcontour, -1, (0,255,0), 2, cv2.LINE_AA, maxLevel=1)
-        plt.imshow(cv2.cvtColor(copy, cv2.COLOR_BGR2RGB))
+        copy = np.copy(frame_rgb)
+        # cv2.drawContours(copy, sigcontour, -1, (0,255,0), 2, cv2.LINE_AA, maxLevel=1) -> comment this line out for final code; don't want the drawn lines in final image before it is fed into the model
+        x,y,w,h = cv2.boundingRect(sigcontour)
+        crop_img = copy[y:y+h, x:x+w]
+        plt.imshow(cv2.cvtColor(crop_img, cv2.COLOR_BGR2RGB))
 
     plt.show()
 
